@@ -46,4 +46,14 @@ public class User implements Serializable {
     public void setPhone(String phone) { this.phone = phone; }
     public Date getCreatedDate() { return createdDate; }
     public void setCreatedDate(Date createdDate) { this.createdDate = createdDate; }
+    private String otp;
+    private boolean isActive;
+    private java.sql.Timestamp otpExpire;
+
+    public String getOtp() { return otp; }
+    public void setOtp(String otp) { this.otp = otp; }
+    public boolean isActive() { return isActive; }
+    public void setActive(boolean active) { isActive = active; }
+    public java.sql.Timestamp getOtpExpire() { return otpExpire; }
+    public void setOtpExpire(java.sql.Timestamp otpExpire) { this.otpExpire = otpExpire; }
 }

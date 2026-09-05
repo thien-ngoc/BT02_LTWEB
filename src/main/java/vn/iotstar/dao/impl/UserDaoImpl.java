@@ -32,6 +32,7 @@ public class UserDaoImpl implements UserDao {
                 user.setRoleid(rs.getInt("roleid"));
                 user.setPhone(rs.getString("phone"));
                 user.setCreatedDate(rs.getDate("createddate"));
+                user.setActive(rs.getBoolean("is_active"));
                 return user;
             }
         } catch (Exception e) {
@@ -98,5 +99,70 @@ public class UserDaoImpl implements UserDao {
             ex.printStackTrace();
         }
         return duplicate;
+    }
+    @Override
+    public void updateOtp(String username, String otp, java.sql.Timestamp expire) {
+        String sql = "UPDATE [User] SET otp = ?, otp_expire = ? WHERE username = ?";
+        try {
+            conn = new DBConnection().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, otp);
+            ps.setTimestamp(2, expire);
+            ps.setString(3, username);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void activateAccount(String username) {
+        String sql = "UPDATE [User] SET is_active = 1, otp = NULL WHERE username = ?";
+        try {
+            conn = new DBConnection().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, username);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        String sql = "SELECT * FROM [User] WHERE email = ?";
+        try {
+            conn = new DBConnection().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setEmail(rs.getString("email"));
+                user.setUserName(rs.getString("username"));
+                user.setFullName(rs.getString("fullname"));
+                user.setPassWord(rs.getString("password"));
+                user.setRoleid(rs.getInt("roleid"));
+                return user;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void updatePassword(String username, String newPassword) {
+        String sql = "UPDATE [User] SET password = ?, otp = NULL WHERE username = ?";
+        try {
+            conn = new DBConnection().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, newPassword);
+            ps.setString(2, username);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

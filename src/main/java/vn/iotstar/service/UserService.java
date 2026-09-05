@@ -8,4 +8,7 @@ public interface UserService {
     boolean register(String username, String password, String email, String fullname, String phone);
     boolean checkExistEmail(String email);
     boolean checkExistUsername(String username);
+    boolean verifyOtp(String username, String otp);
+    boolean sendForgotPasswordOtp(String email);
+    boolean resetPassword(String email, String otp, String newPassword);
 }

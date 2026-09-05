@@ -61,7 +61,8 @@ public class RegisterController extends HttpServlet {
         boolean isSuccess = service.register(username, password, email, fullname, phone);
 
         if (isSuccess) {
-            resp.sendRedirect(req.getContextPath() + "/login");
+            req.setAttribute("username", username);
+            req.getRequestDispatcher("/views/verify-otp.jsp").forward(req, resp);
         } else {
             alertMsg = "Lỗi hệ thống, vui lòng thử lại!";
             req.setAttribute("alert", alertMsg);

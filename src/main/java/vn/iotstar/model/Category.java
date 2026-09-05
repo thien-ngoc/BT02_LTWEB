@@ -10,6 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
+import java.util.List;
+import jakarta.persistence.OneToMany;
 
 @Entity
 @Table(name = "categories")
@@ -54,4 +56,9 @@ public class Category implements Serializable {
 
     public int getStatus() { return status; }
     public void setStatus(int status) { this.status = status; }
+    @OneToMany(mappedBy = "category")
+    private List<Product> products;
+
+    public List<Product> getProducts() { return products; }
+    public void setProducts(List<Product> products) { this.products = products; }
 }

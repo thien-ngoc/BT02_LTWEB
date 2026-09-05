@@ -76,7 +76,14 @@ public class LoginController extends HttpServlet {
             }
             resp.sendRedirect(req.getContextPath() + "/waiting");
         } else {
-            alertMsg = "Tài khoản hoặc mật khẩu không đúng";
+            // ===== ĐOẠN CODE MỚI THÊM VÀO =====
+            User checkUser = service.get(username);
+            if (checkUser != null && !checkUser.isActive()) {
+                alertMsg = "Tài khoản chưa được kích hoạt. Vui lòng kiểm tra email.";
+            } else {
+                alertMsg = "Tài khoản hoặc mật khẩu không đúng";
+            }
+            // ===== KẾT THÚC ĐOẠN MỚI =====
             req.setAttribute("alert", alertMsg);
             req.getRequestDispatcher("/views/login.jsp").forward(req, resp);
         }

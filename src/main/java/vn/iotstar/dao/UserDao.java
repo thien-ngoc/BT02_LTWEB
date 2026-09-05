@@ -7,4 +7,8 @@ public interface UserDao {
     void insert(User user);
     boolean checkExistEmail(String email);
     boolean checkExistUsername(String username);
+    void updateOtp(String username, String otp, java.sql.Timestamp expire);
+    void activateAccount(String username);
+    User getByEmail(String email);
+    void updatePassword(String username, String newPassword);
 }
