@@ -5,8 +5,8 @@ import jakarta.mail.*;
 import jakarta.mail.internet.*;
 
 public class SendMailUtil {
-    private static final String EMAIL_FROM = "youremail@gmail.com"; // đổi thành email của bạn
-    private static final String APP_PASSWORD = "xxxxxxxxxxxxxxxx";  // App Password 16 ký tự
+    private static final String EMAIL_FROM = "gpt05092006@gmail.com"; // đổi thành email của bạn
+    private static final String APP_PASSWORD = "oygonuffkkmkdeul";  // App Password 16 ký tự
 
     public static boolean sendMail(String toEmail, String subject, String content) {
         Properties props = new Properties();

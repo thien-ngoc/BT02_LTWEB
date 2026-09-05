@@ -32,7 +32,12 @@ public class UserDaoImpl implements UserDao {
                 user.setRoleid(rs.getInt("roleid"));
                 user.setPhone(rs.getString("phone"));
                 user.setCreatedDate(rs.getDate("createddate"));
+
+                // === QUAN TRỌNG: THÊM 3 DÒNG NÀY ===
                 user.setActive(rs.getBoolean("is_active"));
+                user.setOtp(rs.getString("otp"));
+                user.setOtpExpire(rs.getTimestamp("otp_expire"));
+
                 return user;
             }
         } catch (Exception e) {
