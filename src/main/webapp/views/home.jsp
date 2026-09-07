@@ -5,6 +5,7 @@
 <head><title>Trang chủ</title></head>
 <body>
 <h2>Xin chào, ${sessionScope.account.fullName}!</h2>
+<a href="${pageContext.request.contextPath}/profile">Thông tin cá nhân</a>
 <a href="${pageContext.request.contextPath}/logout">Đăng xuất</a>
 <a href="${pageContext.request.contextPath}/product">Xem tất cả sản phẩm</a>
 
