@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemesh>
+    <decorator-prefix></decorator-prefix>
+    <mapping path="/views/login.jsp"           decorator="/views/decorators/auth-decorator.jsp"/>
+    <mapping path="/views/register.jsp"        decorator="/views/decorators/auth-decorator.jsp"/>
+    <mapping path="/views/forgot-password.jsp" decorator="/views/decorators/auth-decorator.jsp"/>
+    <mapping path="/views/reset-password.jsp"  decorator="/views/decorators/auth-decorator.jsp"/>
+    <mapping path="/views/verify-otp.jsp"      decorator="/views/decorators/auth-decorator.jsp"/>
+
+    <mapping path="/*" decorator="/views/decorators/main-decorator.jsp"/>
+
+    <mapping path="/image" exclude="true"/>
+    <mapping path="/assets/*" exclude="true"/>
+</sitemesh>

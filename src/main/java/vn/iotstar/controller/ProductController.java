@@ -16,6 +16,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 
+import java.util.HashMap;
+import java.util.Map;
+import vn.iotstar.util.ValidationUtil;
 import vn.iotstar.dao.ICategoryDao;
 import vn.iotstar.dao.impl.CategoryDao;
 import vn.iotstar.model.Category;
@@ -29,6 +32,7 @@ import vn.iotstar.util.Constant;
         "/admin/products", "/admin/product/add", "/admin/product/insert",
         "/admin/product/edit", "/admin/product/update", "/admin/product/delete"
 })
+
 public class ProductController extends HttpServlet {
     IProductService productService = new ProductServiceImpl();
     ICategoryDao categoryDao = new CategoryDao();
@@ -72,6 +76,14 @@ public class ProductController extends HttpServlet {
         if (!uploadDir.exists()) uploadDir.mkdirs();
 
         if (url.contains("/admin/product/insert")) {
+            Map<String, String> errors = validateProduct(req);
+            if (!errors.isEmpty()) {
+                req.setAttribute("errors", errors);
+                req.setAttribute("alert", "Vui lòng kiểm tra lại thông tin sản phẩm.");
+                req.setAttribute("listcate", categoryDao.findAll());
+                req.getRequestDispatcher("/views/admin/product-add.jsp").forward(req, resp);
+                return;
+            }
             Product product = new Product();
             product.setProductName(req.getParameter("productName"));
             product.setPrice(new BigDecimal(req.getParameter("price")));
@@ -104,6 +116,17 @@ public class ProductController extends HttpServlet {
         if (url.contains("/admin/product/update")) {
             int productId = Integer.parseInt(req.getParameter("productId"));
             Product product = productService.findById(productId);
+            Map<String, String> errors = validateProduct(req);
+            if (!errors.isEmpty()) {
+                product.setProductName(req.getParameter("productName"));
+                product.setDescription(req.getParameter("description"));
+                req.setAttribute("product", product);
+                req.setAttribute("errors", errors);
+                req.setAttribute("alert", "Vui lòng kiểm tra lại thông tin sản phẩm.");
+                req.setAttribute("listcate", categoryDao.findAll());
+                req.getRequestDispatcher("/views/admin/product-edit.jsp").forward(req, resp);
+                return;
+            }
             String oldImage = product.getImage();
 
             product.setProductName(req.getParameter("productName"));
@@ -136,5 +159,17 @@ public class ProductController extends HttpServlet {
             productService.update(product);
             resp.sendRedirect(req.getContextPath() + "/admin/products");
         }
+    }
+    private Map<String, String> validateProduct(HttpServletRequest req) {
+        Map<String, String> errors = new HashMap<>();
+        if (ValidationUtil.isBlank(req.getParameter("productName")))
+            errors.put("productName", "Vui lòng nhập tên sản phẩm.");
+        if (!ValidationUtil.isPositiveDecimal(req.getParameter("price")))
+            errors.put("price", "Giá phải là số lớn hơn 0.");
+        if (!ValidationUtil.isNonNegativeInt(req.getParameter("quantity")))
+            errors.put("quantity", "Số lượng phải là số nguyên >= 0.");
+        if (ValidationUtil.isBlank(req.getParameter("categoryId")))
+            errors.put("categoryId", "Vui lòng chọn danh mục.");
+        return errors;
     }
 }

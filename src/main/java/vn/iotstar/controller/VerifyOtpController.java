@@ -21,6 +21,13 @@ public class VerifyOtpController extends HttpServlet {
         String username = req.getParameter("username");
         String otp = req.getParameter("otp");
 
+        if (vn.iotstar.util.ValidationUtil.isBlank(username) || !vn.iotstar.util.ValidationUtil.isValidOtp(otp)) {
+            req.setAttribute("username", username);
+            req.setAttribute("alert", "Mã OTP phải gồm đúng 6 chữ số!");
+            req.getRequestDispatcher("/views/verify-otp.jsp").forward(req, resp);
+            return;
+        }
+
         UserService service = new UserServiceImpl();
         boolean success = service.verifyOtp(username, otp);
 

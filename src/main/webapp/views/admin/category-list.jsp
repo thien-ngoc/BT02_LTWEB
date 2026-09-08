@@ -1,9 +1,8 @@
 <%@ taglib uri="jakarta.tags.functions" prefix="fn" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="jakarta.tags.core" prefix="c" %>
-<!DOCTYPE html>
-<html>
-<head><title>Danh sách Category</title></head>
+<%@ taglib uri="jakarta.tags.core" prefix="c" %><!DOCTYPE html>
+<html lang="vi">
+<head><title>Tiêu đề trang</title></head>
 <body>
 <h2>Quản lý Category</h2>
 <a href="<c:url value='/admin/category/add'/>">Thêm Category</a>

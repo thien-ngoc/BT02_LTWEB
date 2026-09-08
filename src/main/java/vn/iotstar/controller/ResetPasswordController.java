@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import vn.iotstar.util.ValidationUtil;
 import vn.iotstar.service.UserService;
 import vn.iotstar.service.impl.UserServiceImpl;
 
@@ -21,6 +22,14 @@ public class ResetPasswordController extends HttpServlet {
         String email = req.getParameter("email");
         String otp = req.getParameter("otp");
         String newPassword = req.getParameter("newPassword");
+
+        // Validate TRƯỚC khi gọi service, luôn return ngay sau forward
+        if (!ValidationUtil.isValidOtp(otp) || !ValidationUtil.isMinLength(newPassword, 6)) {
+            req.setAttribute("email", email);
+            req.setAttribute("alert", "Mã OTP (6 số) hoặc mật khẩu mới (tối thiểu 6 ký tự) không hợp lệ!");
+            req.getRequestDispatcher("/views/reset-password.jsp").forward(req, resp);
+            return;
+        }
 
         UserService service = new UserServiceImpl();
         boolean success = service.resetPassword(email, otp, newPassword);

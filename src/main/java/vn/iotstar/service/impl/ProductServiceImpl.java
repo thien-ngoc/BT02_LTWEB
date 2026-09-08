@@ -57,6 +57,7 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public int countPages(int pageSize) {
         int total = productDao.count();
+        if (total == 0) return 0;
         return (int) Math.ceil((double) total / pageSize);
     }
 }

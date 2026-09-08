@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import vn.iotstar.util.ValidationUtil;
 import vn.iotstar.service.UserService;
 import vn.iotstar.service.impl.UserServiceImpl;
 
@@ -25,6 +26,13 @@ public class ForgotPasswordController extends HttpServlet {
             throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         String email = req.getParameter("email");
+
+        // Validate TRƯỚC khi gọi service, luôn return ngay sau forward
+        if (!ValidationUtil.isValidEmail(email)) {
+            req.setAttribute("alert", "Email không hợp lệ!");
+            req.getRequestDispatcher("/views/forgot-password.jsp").forward(req, resp);
+            return;
+        }
 
         UserService service = new UserServiceImpl();
         boolean sent = service.sendForgotPasswordOtp(email);

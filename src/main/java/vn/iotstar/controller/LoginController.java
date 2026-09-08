@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import vn.iotstar.util.ValidationUtil;
 import vn.iotstar.model.User;
 import vn.iotstar.service.UserService;
 import vn.iotstar.service.impl.UserServiceImpl;
@@ -57,7 +58,8 @@ public class LoginController extends HttpServlet {
         boolean isRememberMe = "on".equals(remember);
         String alertMsg = "";
 
-        if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+        if (ValidationUtil.isBlank(username) || !ValidationUtil.isMinLength(password, 6)) {
+            alertMsg = "Vui lòng nhập tài khoản và mật khẩu (tối thiểu 6 ký tự).";
             alertMsg = "Tài khoản hoặc mật khẩu không được rỗng";
             req.setAttribute("alert", alertMsg);
             req.getRequestDispatcher("/views/login.jsp").forward(req, resp);

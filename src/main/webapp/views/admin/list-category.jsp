@@ -1,36 +1,47 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <!DOCTYPE html>
-<html>
-<head><title>Danh sách danh mục</title></head>
+<html lang="vi">
+<head><title>Tiêu đề trang</title></head>
 <body>
-<h2>Quản lý danh mục</h2>
-<a href="${pageContext.request.contextPath}/admin/category/add">Thêm danh mục mới</a>
-<table border="1" cellpadding="8">
-    <tr>
-        <th>STT</th>
-        <th>Hình ảnh</th>
-        <th>Tên danh mục</th>
-        <th>Hành động</th>
-    </tr>
-    <c:forEach items="${cateList}" var="cate" varStatus="STT">
-        <tr>
-            <td>${STT.index + 1}</td>
-            <td>
-                <c:if test="${cate.icon != null}">
-                    <c:url value="/image?fname=${cate.icon}" var="imgUrl"/>
-                    <img height="80" width="80" src="${imgUrl}" />
-                </c:if>
-            </td>
-            <td>${cate.name}</td>
-            <td>
-                <a href="<c:url value='/admin/category/edit?id=${cate.id}'/>">Sửa</a>
-                |
-                <a href="<c:url value='/admin/category/delete?id=${cate.id}'/>"
-                   onclick="return confirm('Xác nhận xóa?')">Xóa</a>
-            </td>
-        </tr>
-    </c:forEach>
-</table>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="fw-bold">Quản lý Danh mục</h4>
+    <a href="${pageContext.request.contextPath}/admin/category/add" class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i> Thêm danh mục
+    </a>
+</div>
+
+<div class="card p-3">
+    <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+        <tr><th>#</th><th>Ảnh</th><th>Tên</th><th>Trạng thái</th><th class="text-end">Hành động</th></tr>
+        </thead>
+        <tbody>
+        <c:forEach items="${listcate}" var="cate" varStatus="STT">
+            <tr>
+                <td>${STT.index + 1}</td>
+                <td>
+                    <c:if test="${cate.images != null}">
+                        <c:url value="/image?fname=${cate.images}" var="imgUrl"/>
+                        <img src="${imgUrl}" width="60" height="60" style="object-fit:cover;" class="rounded">
+                    </c:if>
+                </td>
+                <td>${cate.categoryname}</td>
+                <td>
+                    <c:choose>
+                        <c:when test="${cate.status == 1}"><span class="badge bg-success">Hoạt động</span></c:when>
+                        <c:otherwise><span class="badge bg-secondary">Khóa</span></c:otherwise>
+                    </c:choose>
+                </td>
+                <td class="text-end">
+                    <a href="<c:url value='/admin/category/edit?id=${cate.categoryid}'/>" class="btn btn-sm btn-outline-primary">Sửa</a>
+                    <a href="<c:url value='/admin/category/delete?id=${cate.categoryid}'/>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Xác nhận xóa?')">Xóa</a>
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+</div>
+
 </body>
 </html>

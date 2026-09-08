@@ -2,15 +2,20 @@
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <%@ taglib uri="jakarta.tags.functions" prefix="fn" %>
 <!DOCTYPE html>
-<html>
-<head><title>Sửa Category</title></head>
+<html lang="vi">
+<head><title>Tiêu đề trang</title></head>
 <body>
 <h2>Sửa Category</h2>
-<form action="<c:url value='/admin/category/update'/>" method="post" enctype="multipart/form-data">
+<c:if test="${alert != null}">
+    <div class="alert alert-danger py-2">${alert}</div>
+</c:if>
+<form action="<c:url value='/admin/category/update'/>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
     <input type="hidden" name="categoryid" value="${cate.categoryid}">
 
     <label>Category name:</label><br>
-    <input type="text" name="categoryname" value="${cate.categoryname}"><br><br>
+    <input type="text" name="categoryname" class="form-control ${errors.categoryname != null ? 'is-invalid' : ''}"
+           value="${cate.categoryname}" required>
+    <div class="invalid-feedback"><c:out value="${errors.categoryname}" default="Vui lòng nhập tên danh mục."/></div><br>
 
     <label>Link images:</label><br>
     <input type="text" name="images" value="${cate.images}"><br><br>

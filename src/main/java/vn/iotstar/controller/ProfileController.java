@@ -13,6 +13,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 
+import java.util.HashMap;
+import java.util.Map;
+import vn.iotstar.util.ValidationUtil;
 import vn.iotstar.dao.IUserProfileDao;
 import vn.iotstar.dao.impl.UserProfileDao;
 import vn.iotstar.model.User;
@@ -59,6 +62,16 @@ public class ProfileController extends HttpServlet {
 
         String fullname = req.getParameter("fullname");
         String phone = req.getParameter("phone");
+        Map<String, String> errors = new HashMap<>();
+        if (ValidationUtil.isBlank(fullname)) errors.put("fullname", "Vui lòng nhập họ tên.");
+        if (!ValidationUtil.isValidPhone(phone)) errors.put("phone", "Số điện thoại phải gồm đúng 10 chữ số.");
+        if (!errors.isEmpty()) {
+            req.setAttribute("errors", errors);
+            req.setAttribute("user", userEntity);
+            req.setAttribute("alert", "Vui lòng kiểm tra lại thông tin.");
+            req.getRequestDispatcher("/views/profile.jsp").forward(req, resp);
+            return;
+        }
         userEntity.setFullname(fullname);
         userEntity.setPhone(phone);
 

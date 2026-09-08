@@ -22,10 +22,10 @@ public class WaitingController extends HttpServlet {
             req.setAttribute("username", u.getUserName());
 
             if (u.getRoleid() == 1) {
-                resp.sendRedirect(req.getContextPath() + "/admin/home");
-            } else if (u.getRoleid() == 2) {
-                resp.sendRedirect(req.getContextPath() + "/manager/home");
+                // Admin -> chuyển tới trang quản lý danh mục (hoặc dashboard riêng nếu có)
+                resp.sendRedirect(req.getContextPath() + "/admin/categories");
             } else {
+                // User thường -> về trang chủ
                 resp.sendRedirect(req.getContextPath() + "/home");
             }
         } else {

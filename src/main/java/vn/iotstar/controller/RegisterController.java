@@ -2,6 +2,9 @@ package vn.iotstar.controller;
 
 import java.io.IOException;
 
+import java.util.HashMap;
+import java.util.Map;
+import vn.iotstar.util.ValidationUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -35,25 +38,36 @@ public class RegisterController extends HttpServlet {
         UserService service = new UserServiceImpl();
         String alertMsg = "";
 
-        if (username == null || username.isEmpty() ||
-                password == null || password.isEmpty() ||
-                email == null || email.isEmpty()) {
-            alertMsg = "Vui lòng nhập đầy đủ thông tin bắt buộc";
-            req.setAttribute("alert", alertMsg);
+        Map<String, String> errors = new HashMap<>();
+        if (!ValidationUtil.isValidUsername(username))
+            errors.put("username", "Tài khoản 4-20 ký tự, chỉ gồm chữ/số/gạch dưới.");
+        if (ValidationUtil.isBlank(fullname))
+            errors.put("fullname", "Vui lòng nhập họ tên.");
+        if (!ValidationUtil.isValidEmail(email))
+            errors.put("email", "Email không hợp lệ.");
+        if (!ValidationUtil.isValidPhone(phone))
+            errors.put("phone", "Số điện thoại phải gồm đúng 10 chữ số.");
+        if (!ValidationUtil.isMinLength(password, 6))
+            errors.put("password", "Mật khẩu tối thiểu 6 ký tự.");
+
+        if (!errors.isEmpty()) {
+            req.setAttribute("errors", errors);
+            req.setAttribute("alert", "Vui lòng kiểm tra lại thông tin đã nhập.");
             req.getRequestDispatcher("/views/register.jsp").forward(req, resp);
             return;
         }
 
         if (service.checkExistEmail(email)) {
-            alertMsg = "Email đã tồn tại!";
-            req.setAttribute("alert", alertMsg);
+            errors.put("email", "Email đã tồn tại!");
+            req.setAttribute("errors", errors);
+            req.setAttribute("alert", "Email đã tồn tại!");
             req.getRequestDispatcher("/views/register.jsp").forward(req, resp);
             return;
         }
-
         if (service.checkExistUsername(username)) {
-            alertMsg = "Tài khoản đã tồn tại!";
-            req.setAttribute("alert", alertMsg);
+            errors.put("username", "Tài khoản đã tồn tại!");
+            req.setAttribute("errors", errors);
+            req.setAttribute("alert", "Tài khoản đã tồn tại!");
             req.getRequestDispatcher("/views/register.jsp").forward(req, resp);
             return;
         }

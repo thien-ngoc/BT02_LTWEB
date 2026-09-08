@@ -1,8 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <!DOCTYPE html>
-<html>
-<head><title>Quản lý Sản phẩm</title></head>
+<html lang="vi">
+<head><title>Tiêu đề trang</title></head>
 <body>
 <h2>Quản lý Sản phẩm</h2>
 <a href="<c:url value='/admin/product/add'/>">Thêm sản phẩm</a>

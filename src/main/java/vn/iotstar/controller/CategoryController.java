@@ -16,6 +16,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 
+import java.util.HashMap;
+import java.util.Map;
+import vn.iotstar.util.ValidationUtil;
 import vn.iotstar.model.Category;
 import vn.iotstar.service.ICategoryService;
 import vn.iotstar.service.impl.CategoryServiceImpl;
@@ -62,6 +65,13 @@ public class CategoryController extends HttpServlet {
         String url = req.getRequestURI();
 
         if (url.contains("/admin/category/insert")) {
+            Map<String, String> errors = validateCategory(req);
+            if (!errors.isEmpty()) {
+                req.setAttribute("errors", errors);
+                req.setAttribute("alert", "Vui lòng kiểm tra lại thông tin danh mục.");
+                req.getRequestDispatcher("/views/admin/category-add.jsp").forward(req, resp);
+                return;
+            }
             String categoryname = req.getParameter("categoryname");
             int status = Integer.parseInt(req.getParameter("status"));
             String images = req.getParameter("images");
@@ -98,6 +108,16 @@ public class CategoryController extends HttpServlet {
         }
 
         if (url.contains("/admin/category/update")) {
+            Map<String, String> errors = validateCategory(req);
+            if (!errors.isEmpty()) {
+                int cid = Integer.parseInt(req.getParameter("categoryid"));
+                Category cate = cateService.findById(cid);
+                req.setAttribute("cate", cate);
+                req.setAttribute("errors", errors);
+                req.setAttribute("alert", "Vui lòng kiểm tra lại thông tin danh mục.");
+                req.getRequestDispatcher("/views/admin/category-edit.jsp").forward(req, resp);
+                return;
+            }
             int categoryid = Integer.parseInt(req.getParameter("categoryid"));
             String categoryname = req.getParameter("categoryname");
             int status = Integer.parseInt(req.getParameter("status"));
@@ -148,5 +168,13 @@ public class CategoryController extends HttpServlet {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    private Map<String, String> validateCategory(HttpServletRequest req) {
+        Map<String, String> errors = new HashMap<>();
+        if (ValidationUtil.isBlank(req.getParameter("categoryname")))
+            errors.put("categoryname", "Vui lòng nhập tên danh mục.");
+        if (ValidationUtil.isBlank(req.getParameter("status")))
+            errors.put("status", "Vui lòng chọn trạng thái.");
+        return errors;
     }
 }
