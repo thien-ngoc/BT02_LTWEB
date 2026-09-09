@@ -11,4 +11,5 @@ public interface UserService {
     boolean verifyOtp(String username, String otp);
     boolean sendForgotPasswordOtp(String email);
     boolean resetPassword(String email, String otp, String newPassword);
+    int changePassword(String username, String oldPassword, String newPassword);
 }

@@ -48,6 +48,32 @@
         </div>
     </div>
 </div>
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card p-4">
+            <h4 class="fw-bold mb-4 text-center">Đổi mật khẩu</h4>
 
+            <c:if test="${pwAlert != null}">
+                <div class="alert alert-info py-2">${pwAlert}</div>
+            </c:if>
+
+            <form action="${pageContext.request.contextPath}/change-password" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Mật khẩu hiện tại</label>
+                    <input type="password" name="oldPassword" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Mật khẩu mới</label>
+                    <input type="password" name="newPassword" class="form-control" minlength="6" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Xác nhận mật khẩu mới</label>
+                    <input type="password" name="confirmPassword" class="form-control" minlength="6" required>
+                </div>
+                <button type="submit" class="btn btn-warning w-100">Đổi mật khẩu</button>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>

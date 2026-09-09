@@ -58,9 +58,15 @@ public class LoginController extends HttpServlet {
         boolean isRememberMe = "on".equals(remember);
         String alertMsg = "";
 
-        if (ValidationUtil.isBlank(username) || !ValidationUtil.isMinLength(password, 6)) {
-            alertMsg = "Vui lòng nhập tài khoản và mật khẩu (tối thiểu 6 ký tự).";
-            alertMsg = "Tài khoản hoặc mật khẩu không được rỗng";
+        if (ValidationUtil.isBlank(username) || ValidationUtil.isBlank(password)) {
+            alertMsg = "Tài khoản hoặc mật khẩu không được để trống";
+            req.setAttribute("alert", alertMsg);
+            req.getRequestDispatcher("/views/login.jsp").forward(req, resp);
+            return;
+        }
+
+        if (!ValidationUtil.isMinLength(password, 6)) {
+            alertMsg = "Mật khẩu phải có tối thiểu 6 ký tự";
             req.setAttribute("alert", alertMsg);
             req.getRequestDispatcher("/views/login.jsp").forward(req, resp);
             return;

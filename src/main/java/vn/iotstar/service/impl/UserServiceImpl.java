@@ -36,9 +36,8 @@ public class UserServiceImpl implements UserService {
         User user = new User(email, username, fullname, password, null, 3, phone, date);
         userDao.insert(user);
 
-        // Sinh và gửi OTP
         String otp = SendMailUtil.generateOTP();
-        Timestamp expire = new Timestamp(System.currentTimeMillis() + 5 * 60 * 1000); // hết hạn sau 5 phút
+        Timestamp expire = new Timestamp(System.currentTimeMillis() + 5 * 60 * 1000);
         userDao.updateOtp(username, otp, expire);
 
         String content = "<h3>Xác thực tài khoản</h3>"
@@ -65,7 +64,7 @@ public class UserServiceImpl implements UserService {
         if (user == null || user.getOtp() == null) return false;
         if (!user.getOtp().equals(otp)) return false;
         if (user.getOtpExpire() != null && user.getOtpExpire().before(new Timestamp(System.currentTimeMillis()))) {
-            return false; // hết hạn
+            return false;
         }
         userDao.activateAccount(username);
         return true;
@@ -97,5 +96,19 @@ public class UserServiceImpl implements UserService {
         }
         userDao.updatePassword(user.getUserName(), newPassword);
         return true;
+    }
+
+    // Trả về: 0 = thành công, 1 = mật khẩu cũ sai, 2 = không tìm thấy user
+    @Override
+    public int changePassword(String username, String oldPassword, String newPassword) {
+        User user = userDao.get(username);
+        if (user == null) {
+            return 2;
+        }
+        if (!oldPassword.equals(user.getPassWord())) {
+            return 1;
+        }
+        userDao.updatePassword(username, newPassword);
+        return 0;
     }
 }
